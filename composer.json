@@ -1,0 +1,23 @@
+{
+    "name": "frengky/sociavel",
+    "description": "Social media integration package for Laravel",
+    "require": {
+        "laravel/framework": "5.0.*",
+        "google/apiclient": "~1.1",
+        "ruudk/twitter-oauth": "~1.0",
+        "facebook/php-sdk-v4": "^5.1"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Frengky",
+            "email": "frengky.lim@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "Sociavel\\": "src/Sociavel/"
+        }
+    },    
+}
