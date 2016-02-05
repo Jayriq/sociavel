@@ -9,7 +9,7 @@ use Facebook\FacebookRequest;
 use Facebook\FacebookSession;
 use Facebook\GraphUser;
 
-class FacebookProvider extends SocialMediaProvider {
+class FacebookProvider extends SociavelProvider {
 
     /**
      * Get the official API client instance

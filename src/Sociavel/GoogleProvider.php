@@ -6,7 +6,7 @@ use Auth;
 use Request;
 use Illuminate\Foundation\Application;
 
-class GoogleProvider extends SocialMediaProvider {
+class GoogleProvider extends SociavelProvider {
 
     /**
      * Get the official API client instance

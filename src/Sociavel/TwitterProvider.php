@@ -7,7 +7,7 @@ use Auth;
 use Request;
 use Illuminate\Foundation\Application;
 
-class TwitterProvider extends SocialMediaProvider {
+class TwitterProvider extends SociavelProvider {
 
     /**
      * Get the official API client instance
