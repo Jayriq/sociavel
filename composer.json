@@ -1,6 +1,8 @@
 {
     "name": "frengky/sociavel",
     "description": "Social media integration package for Laravel",
+    "keywords": ["laravel", "social", "twitter", "google", "facebook"],
+    "homepage": "https://github.com/frengky/sociavel",
     "require": {
         "laravel/framework": "5.0.*",
         "google/apiclient": "~1.1",

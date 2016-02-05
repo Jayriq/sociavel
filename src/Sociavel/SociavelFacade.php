@@ -2,13 +2,13 @@
 
 use Illuminate\Support\Facades\Facade;
 
-class SocialMediaFacade extends Facade {
+class SociavelFacade extends Facade {
 
 	/**
 	 * Get the registered name of the component.
 	 *
 	 * @return string
 	 */
-	protected static function getFacadeAccessor() { return 'sm'; }
+	protected static function getFacadeAccessor() { return 'sv'; }
 
 }

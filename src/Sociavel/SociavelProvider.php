@@ -6,7 +6,7 @@ use Auth;
 use Request;
 use Illuminate\Foundation\Application;
 
-abstract class SocialMediaProvider {
+abstract class SociavelProvider {
 
     /**
      * The application instance

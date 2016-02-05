@@ -6,7 +6,7 @@ use Auth;
 use Request;
 use Illuminate\Foundation\Application;
 
-class SocialMedia {
+class Sociavel {
 
     /**
      * The application instance
@@ -39,7 +39,7 @@ class SocialMedia {
 
         if (! isset($this->providers[$provider]))
         {
-            $className = 'App\Lib\SocialMedia\\' . ucfirst($provider) . 'Provider';
+            $className = 'Sociavel\\' . ucfirst($provider) . 'Provider';
             $this->providers[$provider] = new $className($this->app);
         }
 

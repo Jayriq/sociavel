@@ -12,7 +12,7 @@ class FacebookClient {
     /**
      * The Facebook redirect login helper object
      *
-     * @var \App\Lib\SocialMedia\FacebookRedirectLoginHelper
+     * @var \Sociavel\FacebookRedirectLoginHelper
      */
     protected $redirectHelper;
 
@@ -39,7 +39,7 @@ class FacebookClient {
     /**
      * Get the Facebook redirect login helper object
      *
-     * @return \App\Lib\SocialMedia\FacebookRedirectLoginHelper
+     * @return \Sociavel\FacebookRedirectLoginHelper
      */
     public function getRedirectHelper()
     {
