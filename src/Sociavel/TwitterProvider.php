@@ -1,6 +1,5 @@
 <?php namespace Sociavel;
 
-use App;
 use Config;
 use Log;
 use Auth;
@@ -74,8 +73,7 @@ class TwitterProvider extends SociavelProvider {
     {
         $this->app->session->forget('twitter');
 
-        $locale = '/' . App::getLocale();
-        $callback_uri = url($locale . Config::get('services.twitter_oauth.redirect'));
+        $callback_uri = url(Config::get('services.twitter_oauth.redirect'));
 
         if ($this->client === null)
         {

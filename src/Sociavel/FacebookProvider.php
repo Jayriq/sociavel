@@ -1,6 +1,5 @@
 <?php namespace Sociavel;
 
-use App;
 use Config;
 use Log;
 use Facebook\Exceptions\FacebookResponseException;
@@ -107,11 +106,9 @@ class FacebookProvider extends SociavelProvider {
         {
             $this->client = $this->getClient();
         }
-        
-        $locale = '/' . App::getLocale();
 
         $loginUrl = $this->client->getRedirectLoginHelper()->getLoginUrl(
-            url($locale . Config::get('services.facebook_oauth.redirect')),
+            url(Config::get('services.facebook_oauth.redirect')),
             Config::get('services.facebook_oauth.scope')
         );
 

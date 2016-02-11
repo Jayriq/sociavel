@@ -1,6 +1,5 @@
 <?php namespace Sociavel;
 
-use App;
 use Session;
 use Config;
 use Log;
@@ -27,8 +26,7 @@ class GoogleClient extends \Google_Client {
         
         $this->setScopes(Config::get('services.google_oauth.scope'));
 
-        $locale = '/' . App::getLocale();
-        $url = url($locale . Config::get('services.google_oauth.redirect'));
+        $url = url(Config::get('services.google_oauth.redirect'));
         $this->setRedirectUri($url);
 
         if ($access_token = Session::get('google.access_token'))
