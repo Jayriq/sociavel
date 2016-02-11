@@ -1,13 +1,10 @@
 <?php namespace Sociavel;
 
+use App;
 use Config;
 use Log;
-use Auth;
-use Request;
-use Illuminate\Foundation\Application;
-use Facebook\FacebookRequest;
-use Facebook\FacebookSession;
-use Facebook\GraphUser;
+use Facebook\Exceptions\FacebookResponseException;
+use Facebook\Exceptions\FacebookSDKException;
 
 class FacebookProvider extends SociavelProvider {
 
@@ -45,16 +42,19 @@ class FacebookProvider extends SociavelProvider {
         }
 
         $access_token = null;
-        $session = null;
+        $helper = $this->client->getRedirectLoginHelper();
 
         try 
         {
-            $session = $this->client->getRedirectHelper()->getSessionFromRedirect();
-            $access_token = $session->getToken();
+            $access_token = $helper->getAccessToken();
         }
-        catch (\Exception $ex)
+        catch(FacebookResponseException $ex)
         {
-            Log::error('Facebook_Auth_Exception caught: ' . $ex->getMessage());
+            Log::error('FacebookResponseException caught: ' . $ex->getMessage());   
+        }
+        catch (FacebookSDKException $ex)
+        {
+            Log::error('FacebookSDKException caught: ' . $ex->getMessage());
         }
 
         if (empty($access_token))
@@ -63,13 +63,33 @@ class FacebookProvider extends SociavelProvider {
             return false;
         }
 
-        $this->app->session->set('facebook.oauth_access_token', $session->getToken());
+        $this->app->session->set('facebook.oauth_access_token', $access_token->getValue());
 
-        $graphObject = $this->client->get('/me')->getGraphObject();
-        
-        $account = new FacebookAccount($graphObject->asArray());
+        $response = null;
+        try
+        {
+            $response = $this->client->get('/me?fields=id,name,first_name,middle_name,last_name,email,birthday,gender,link', $access_token->getValue());
+        }
+        catch(FacebookResponseException $ex)
+        {
+            Log::error('FacebookResponseException caught: ' . $ex->getMessage());   
+        }
+        catch (FacebookSDKException $ex)
+        {
+            Log::error('FacebookSDKException caught: ' . $ex->getMessage());
+        }
 
-        $this->app->session->put('facebook.me', $graphObject->asArray());
+        if (empty($response))
+        {
+            Log::error('Facebook return an invalid response');
+            return false;
+        }
+
+        $graphUser = $response->getGraphUser();
+
+        $account = new FacebookAccount($graphUser);
+
+        $this->app->session->put('facebook.me', $graphUser);
 
         $closure($account);
 
@@ -88,7 +108,14 @@ class FacebookProvider extends SociavelProvider {
             $this->client = $this->getClient();
         }
         
-        return redirect($this->client->getLoginUrl());
+        $locale = '/' . App::getLocale();
+
+        $loginUrl = $this->client->getRedirectLoginHelper()->getLoginUrl(
+            url($locale . Config::get('services.facebook_oauth.redirect')),
+            Config::get('services.facebook_oauth.scope')
+        );
+
+        return redirect($loginUrl);
     }
 
 }

@@ -1,24 +1,26 @@
 <?php namespace Sociavel;
 
+use Facebook\GraphNodes\GraphUser;
 use Sociavel\Contracts\SocialMediaAccount;
 
 class FacebookAccount implements SocialMediaAccount {
+
     /**
      * All of the account's attributes.
      *
-     * @var array
+     * @var \Facebook\GraphNodes\GraphUser
      */
-    protected $attributes;
+    protected $graphuser;
 
     /**
      * Create a new generic account object.
      *
-     * @param  array  $attributes
+     * @param  \Facebook\GraphNodes\GraphUser  $user
      * @return void
      */
-    public function __construct(array $attributes)
+    public function __construct(GraphUser $user)
     {
-        $this->attributes = $attributes;
+        $this->graphuser = $user;
     }
 
     /**
@@ -28,7 +30,7 @@ class FacebookAccount implements SocialMediaAccount {
      */
     public function getId()
     {
-        return $this->attributes['id'];    
+        return $this->graphuser->getId();
     }
 
     /**
@@ -38,7 +40,7 @@ class FacebookAccount implements SocialMediaAccount {
      */    
     public function getNickname()
     {
-        return $this->getName();
+        return $this->graphuser->getName();
     }
 
     /**
@@ -48,7 +50,20 @@ class FacebookAccount implements SocialMediaAccount {
      */    
     public function getName()
     {
-        return $this->attributes['name'];
+        $fullname = $this->getFirstName();
+
+        if ($name = $this->getMiddleName())
+        {
+            $fullname .= " $name";
+        }
+
+        if ($name = $this->getLastName())
+        {
+            $fullname .= " $name";
+        }
+
+        return $fullname;
+
     }
 
     /**
@@ -58,7 +73,7 @@ class FacebookAccount implements SocialMediaAccount {
      */    
     public function getEmail()
     {
-        return isset($this->attributes['email']) ? $this->attributes['email'] : null;    
+        return $this->graphuser->getEmail();
     }
 
     /**
@@ -78,7 +93,17 @@ class FacebookAccount implements SocialMediaAccount {
      */    
     public function getFirstname()
     {
-        return $this->attributes['first_name'];    
+        return $this->graphuser->getFirstName();
+    }
+
+    /**
+     * Get the Facebook account middle name
+     *
+     * @return string
+     */     
+    public function getMiddleName()
+    {
+        return $this->graphuser->getMiddleName();
     }
 
     /**
@@ -88,7 +113,7 @@ class FacebookAccount implements SocialMediaAccount {
      */     
     public function getLastname()
     {
-        return $this->attributes['last_name'];    
+        return $this->graphuser->getLastName();
     }
 
     /**
@@ -98,7 +123,7 @@ class FacebookAccount implements SocialMediaAccount {
      */     
     public function getBirthday()
     {
-        return $this->attributes['birthday'];    
+        return $this->graphuser->getBirthday()->format('Y-m-d');
     }
 
     /**
@@ -108,7 +133,7 @@ class FacebookAccount implements SocialMediaAccount {
      */   
     public function getGender()
     {
-        return $this->attributes['gender'];    
+        return $this->graphuser->getGender();
     }
 
     /**
@@ -128,17 +153,17 @@ class FacebookAccount implements SocialMediaAccount {
      */     
     public function getProfileUrl()
     {
-        return $this->attributes['link'];
+        return $this->graphuser->getLink();
     }
 
     /**
      * Get the Facebook account verified status
      *
-     * @return int
+     * @return mixed
      */     
     public function getVerified()
     {
-        return $this->attributes['verified'];
+        return null;
     }
 
     /**
@@ -158,7 +183,20 @@ class FacebookAccount implements SocialMediaAccount {
      */     
     public function toArray()
     {
-        return array_merge($this->attributes, array('photo' => $this->getPhoto()));
+        return array(
+            'id' => $this->getId(),
+            'nickname' => $this->getNickname(),
+            'name' => $this->getName(),
+            'email' => $this->getEmail(),
+            'first_name' => $this->getFirstname(),
+            'middle_name' => $this->getMiddleName(),
+            'last_name' => $this->getLastName(),
+            'birthday' => $this->getBirthday(),
+            'gender' => $this->getGender(),
+            'photo' => $this->getPhoto(),
+            'profile_url' => $this->getProfileUrl(),
+            'verified' => $this->getVerified()
+        );
     }    
 
 }
